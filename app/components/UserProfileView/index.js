@@ -8,7 +8,7 @@ import {
 
 import {
   LIGHT_GRAY_BACK,
-  DARK_GRAY_TEXT,
+  PRIMARY_GRAY_TEXT,
 } from '../../theme/colors';
 
 const UserProfileView = props => {
@@ -38,12 +38,12 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 24,
-    color: DARK_GRAY_TEXT,
+    color: PRIMARY_GRAY_TEXT,
     marginTop: 20,
   },
   roleText: {
     fontSize: 18,
-    color: DARK_GRAY_TEXT,
+    color: PRIMARY_GRAY_TEXT,
     marginTop: 8,
   },
 });

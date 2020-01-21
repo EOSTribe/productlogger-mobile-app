@@ -2,8 +2,8 @@ import { StyleSheet, Platform } from 'react-native';
 
 import {
   LIGHT_GRAY_BACK,
-  DARK_GRAY_TEXT,
-  DARK_GRAY_BACK
+  PRIMARY_GRAY_TEXT,
+  SECONDARY_GRAY_TEXT,
 } from '../../theme/colors';
 
 const styles = StyleSheet.create({
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 8,
     marginBottom: 8,
-    color: '#7B8D93',
+    color: SECONDARY_GRAY_TEXT,
   },
   listItem: {
     height: 50,
@@ -41,10 +41,10 @@ const styles = StyleSheet.create({
   listItemText: {
     marginLeft: 20,
     fontSize: 18,
-    color: '#9da6a9',
+    color: PRIMARY_GRAY_TEXT,
   },
   addButton: {
-    backgroundColor: '#CFD8DC',
+    backgroundColor: LIGHT_GRAY_BACK,
     height: 51,
     alignItems: 'center',
     justifyContent: 'center',
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   addButtonText: {
-    color: '#7B8D93',
+    color: SECONDARY_GRAY_TEXT,
     fontSize: 24,
   },
 });

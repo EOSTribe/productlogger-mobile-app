@@ -18,6 +18,10 @@ const UserListItem = props => {
   )
 };
 const ManagerHomeScreen = props => {
+  const {
+    navigation: { navigate }
+  } = props;
+
   const managerData = {
     username: 'brunostebani',
     image: '',
@@ -54,7 +58,7 @@ const ManagerHomeScreen = props => {
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
         />
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={() => navigate('AddUser')}>
           <Text style={styles.addButtonText}>+ Add new user</Text>
         </TouchableOpacity>
       </View>

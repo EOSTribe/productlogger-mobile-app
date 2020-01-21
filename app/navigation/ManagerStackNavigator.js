@@ -1,10 +1,16 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import { ManagerHomeScreen } from '../screens/ManagerHome';
+import {
+  ManagerHomeScreen,
+  AddUserScreen,
+} from '../screens';
 
 const ManagerStackNavigator = createStackNavigator(
   {
     ManagerHome: {
       screen: ManagerHomeScreen,
+    },
+    AddUser: {
+      screen: AddUserScreen,
     },
   },
   {
