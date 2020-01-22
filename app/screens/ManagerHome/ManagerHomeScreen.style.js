@@ -39,9 +39,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   listItemText: {
-    marginLeft: 20,
+    marginHorizontal: 20,
     fontSize: 18,
     color: PRIMARY_GRAY_TEXT,
+    flex: 1,
   },
   addButton: {
     backgroundColor: LIGHT_GRAY_BACK,
