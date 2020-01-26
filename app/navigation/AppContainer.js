@@ -1,10 +1,16 @@
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import ManagerStackNavigator from './ManagerStackNavigator';
+import ManagerStackNavigator from './ManagerStack';
+import UserStackNavigator from './UserStack';
 
 const AppContainer = createAppContainer(
-  createSwitchNavigator({
-    Manager: ManagerStackNavigator,
-  })
+  createSwitchNavigator(
+    {
+      Manager: ManagerStackNavigator,
+      User: UserStackNavigator,
+    },
+    {
+      initialRouteName: 'User',
+    })
 );
 
 export default AppContainer;
