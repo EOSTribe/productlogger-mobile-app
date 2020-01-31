@@ -1,8 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import {
-  DARK_GRAY_BACK,
-} from '../../theme/colors';
+import { DARK_GRAY_BACK } from '../../theme/colors';
 
 const styles = StyleSheet.create({
   safeContainer: {

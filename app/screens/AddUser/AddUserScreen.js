@@ -24,7 +24,7 @@ const AddUserScreen = props => {
         </View>
       </View>
     </SafeAreaView>
-  )
+  );
 };
 
 export default AddUserScreen;

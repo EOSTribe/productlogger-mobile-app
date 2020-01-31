@@ -16,9 +16,15 @@ const AddProductScreen = props => {
             <Text style={styles.formLabel}>Product Name</Text>
             <TextInput style={[styles.formInput, styles.nameInput]} />
             <Text style={styles.formLabel}>Description</Text>
-            <TextInput style={[styles.formInput, styles.descriptionInput]} multiline={true} />
+            <TextInput
+              style={[styles.formInput, styles.descriptionInput]}
+              multiline={true}
+            />
             <Text style={styles.formLabel}>RFID Tag</Text>
-            <TextInput style={[styles.formInput, styles.tagInput]} secureTextEntry={true} />
+            <TextInput
+              style={[styles.formInput, styles.tagInput]}
+              secureTextEntry={true}
+            />
             <TouchableOpacity style={[styles.button, styles.scanButton]}>
               <Text style={styles.buttonText}>Scan</Text>
             </TouchableOpacity>
@@ -29,7 +35,7 @@ const AddProductScreen = props => {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  )
+  );
 };
 
 export default AddProductScreen;

@@ -7,9 +7,7 @@ import UserProfileView from '../../components/UserProfileView';
 import { DARK_GRAY_BACK } from '../../theme/colors';
 
 const UserDetailScreen = props => {
-  const {
-    navigation
-  } = props;
+  const { navigation } = props;
 
   const [enabled, setEnabled] = useState(false);
   const userData = navigation.getParam('user', {});
@@ -23,15 +21,19 @@ const UserDetailScreen = props => {
       <View style={styles.innerContainer}>
         <UserProfileView data={userData} style={styles.profileView} />
         <View style={styles.switchWrapper}>
-          <Switch value={enabled} onValueChange={setEnabled} ios_backgroundColor={DARK_GRAY_BACK} />
+          <Switch
+            value={enabled}
+            onValueChange={setEnabled}
+            ios_backgroundColor={DARK_GRAY_BACK}
+          />
           <Text style={styles.switchLabel}>Enabled</Text>
         </View>
         <TouchableOpacity style={styles.deleteButton} onPress={_handleDelete}>
           <Text style={styles.deleteButtonText}>Delete User</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView >
-  )
+    </SafeAreaView>
+  );
 };
 
 export default UserDetailScreen;

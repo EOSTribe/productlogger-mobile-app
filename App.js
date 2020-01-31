@@ -12,14 +12,11 @@ import { enableScreens } from 'react-native-screens';
 import AppContainer from './app/navigation/AppContainer';
 
 const App = props => {
-
   useEffect(() => {
     enableScreens();
-  }, [])
+  }, []);
 
-  return (
-    <AppContainer />
-  );
-}
+  return <AppContainer />;
+};
 
 export default App;

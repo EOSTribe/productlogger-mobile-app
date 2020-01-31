@@ -16,19 +16,25 @@ const SignupScreen = props => {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.innerContainer}>
-        <TextInput style={styles.input}
+        <TextInput
+          style={styles.input}
           placeholder={'Full Name'}
           value={fullName}
-          onChangeText={setFullName} />
-        <TextInput style={styles.input}
+          onChangeText={setFullName}
+        />
+        <TextInput
+          style={styles.input}
           placeholder={'Email'}
           value={email}
-          onChangeText={setEmail} />
-        <TextInput style={styles.input}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
           placeholder={'Password'}
           value={password}
           onChangeText={setPassword}
-          secureTextEntry={true} />
+          secureTextEntry={true}
+        />
         <TouchableOpacity style={styles.button} onPress={_handleSignup}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>

@@ -1,15 +1,7 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 
-import {
-  LIGHT_GRAY_BACK,
-  PRIMARY_GRAY_TEXT,
-} from '../../theme/colors';
+import { LIGHT_GRAY_BACK, PRIMARY_GRAY_TEXT } from '../../theme/colors';
 
 const UserProfileView = props => {
   const { data } = props;
@@ -20,7 +12,7 @@ const UserProfileView = props => {
       <Text style={styles.nameText}>{data.username}</Text>
       <Text style={styles.roleText}>{data.role}</Text>
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({

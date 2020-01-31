@@ -1,9 +1,5 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import {
-  UserHomeScreen,
-  AddProductScreen,
-  AddRecordScreen,
-} from '../screens';
+import { UserHomeScreen, AddProductScreen, AddRecordScreen } from '../screens';
 
 const UserStackNavigator = createStackNavigator(
   {
@@ -22,7 +18,7 @@ const UserStackNavigator = createStackNavigator(
       headerShown: false,
     },
     initialRouteName: 'UserHome',
-  }
+  },
 );
 
 export default UserStackNavigator;

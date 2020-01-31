@@ -17,11 +17,11 @@ const UserListItem = props => {
         <Icon name="ios-arrow-forward" color={SECONDARY_GRAY_TEXT} />
       </View>
     </TouchableOpacity>
-  )
+  );
 };
 const ManagerHomeScreen = props => {
   const {
-    navigation: { navigate }
+    navigation: { navigate },
   } = props;
 
   const managerData = {
@@ -49,7 +49,7 @@ const ManagerHomeScreen = props => {
     },
   ];
 
-  const _handlePressUserItem = (data) => {
+  const _handlePressUserItem = data => {
     navigate('UserDetail', { user: data });
   };
 
@@ -60,16 +60,20 @@ const ManagerHomeScreen = props => {
         <Text style={styles.listTitleText}>Users</Text>
         <FlatList
           data={users}
-          renderItem={({ item, index }) => <UserListItem data={item} onPress={_handlePressUserItem} />}
+          renderItem={({ item, index }) => (
+            <UserListItem data={item} onPress={_handlePressUserItem} />
+          )}
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
         />
-        <TouchableOpacity style={styles.addButton} onPress={() => navigate('AddUser')}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => navigate('AddUser')}>
           <Text style={styles.addButtonText}>+ Add new user</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  )
+  );
 };
 
 export default ManagerHomeScreen;

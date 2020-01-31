@@ -13,7 +13,8 @@ const AppContainer = createAppContainer(
     },
     {
       initialRouteName: 'Auth',
-    })
+    },
+  ),
 );
 
 export default AppContainer;

@@ -1,7 +1,5 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import {
-  SignupScreen
-} from '../screens';
+import { SignupScreen } from '../screens';
 
 const AuthStackNavigator = createStackNavigator(
   {
@@ -14,7 +12,7 @@ const AuthStackNavigator = createStackNavigator(
       headerShown: false,
     },
     initialRouteName: 'Signup',
-  }
+  },
 );
 
 export default AuthStackNavigator;

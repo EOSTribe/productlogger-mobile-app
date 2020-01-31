@@ -7,7 +7,7 @@ import UserProfileView from '../../components/UserProfileView';
 
 const UserHomeScreen = props => {
   const {
-    navigation: { navigate }
+    navigation: { navigate },
   } = props;
 
   const userData = {
@@ -20,15 +20,19 @@ const UserHomeScreen = props => {
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.innerContainer}>
         <UserProfileView data={userData} style={styles.profileView} />
-        <TouchableOpacity style={styles.button} onPress={() => navigate('AddProduct')}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigate('AddProduct')}>
           <Text style={styles.buttonText}>Add new product</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigate('AddRecord')}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigate('AddRecord')}>
           <Text style={styles.buttonText}>Add record</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  )
+  );
 };
 
 export default UserHomeScreen;

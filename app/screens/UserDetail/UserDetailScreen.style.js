@@ -1,9 +1,6 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import {
-  DARK_GRAY_BACK,
-  SECONDARY_GRAY_TEXT,
-} from '../../theme/colors';
+import { DARK_GRAY_BACK, SECONDARY_GRAY_TEXT } from '../../theme/colors';
 
 const styles = StyleSheet.create({
   safeContainer: {
@@ -39,7 +36,7 @@ const styles = StyleSheet.create({
     color: SECONDARY_GRAY_TEXT,
     fontSize: 20,
     marginLeft: 8,
-  }
+  },
 });
 
 export default styles;

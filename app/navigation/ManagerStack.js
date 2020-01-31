@@ -1,9 +1,5 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import {
-  ManagerHomeScreen,
-  AddUserScreen,
-  UserDetailScreen,
-} from '../screens';
+import { ManagerHomeScreen, AddUserScreen, UserDetailScreen } from '../screens';
 
 const ManagerStackNavigator = createStackNavigator(
   {
@@ -14,7 +10,7 @@ const ManagerStackNavigator = createStackNavigator(
       screen: AddUserScreen,
     },
     UserDetail: {
-      screen: UserDetailScreen
+      screen: UserDetailScreen,
     },
   },
   {
@@ -22,7 +18,7 @@ const ManagerStackNavigator = createStackNavigator(
       headerShown: false,
     },
     initialRouteName: 'ManagerHome',
-  }
+  },
 );
 
 export default ManagerStackNavigator;
