@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import ecc from 'eosjs-ecc-rn';
 
 import styles from './SignupScreen.style';
 
@@ -9,8 +10,14 @@ const SignupScreen = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const _handleSignup = () => {
-    props.navigation.navigate('Manager');
+  const _handleSignup = async () => {
+    const privateKey = await ecc.randomKey();
+    const publicKey = ecc.privateToPublic(privateKey);
+
+    console.log('Private key: ', privateKey);
+    console.log('Public key: ', publicKey);
+
+    // props.navigation.navigate('Manager');
   };
 
   return (
