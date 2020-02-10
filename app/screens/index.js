@@ -7,3 +7,5 @@ export { UserDetailScreen } from './UserDetail';
 export { UserHomeScreen } from './UserHome';
 export { AddProductScreen } from './AddProduct';
 export { AddRecordScreen } from './AddRecord';
+
+export { ScannerScreen } from './Scanner';

@@ -1,5 +1,10 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import { UserHomeScreen, AddProductScreen, AddRecordScreen } from '../screens';
+import {
+  UserHomeScreen,
+  AddProductScreen,
+  AddRecordScreen,
+  ScannerScreen,
+} from '../screens';
 
 const UserStackNavigator = createStackNavigator(
   {
@@ -11,6 +16,9 @@ const UserStackNavigator = createStackNavigator(
     },
     AddRecord: {
       screen: AddRecordScreen,
+    },
+    Scanner: {
+      screen: ScannerScreen,
     },
   },
   {
