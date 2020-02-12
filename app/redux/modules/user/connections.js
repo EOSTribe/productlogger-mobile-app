@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://';
+const API_BASE_URL = 'http://newaccount.productlogger.eostribe.io/accounts';
 
 export const register = async params => {
   const options = {
@@ -10,9 +10,9 @@ export const register = async params => {
     body: JSON.stringify(params),
   };
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, options);
+    const response = await fetch(`${API_BASE_URL}`, options);
     const responseJson = await response.json();
-    if (response.status === 201) {
+    if (response.status === 200) {
       return responseJson;
     }
     return {

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import Spinner from 'react-native-loading-spinner-overlay';
+import * as Keychain from 'react-native-keychain';
 
-import { Api, JsonRpc, RpcError } from 'eosjs-rn';
 import { JsSignatureProvider } from 'eosjs-rn/dist/eosjs-jssig';
-import { TextEncoder, TextDecoder } from 'text-encoding';
 
 import ecc from 'eosjs-ecc-rn';
 
@@ -12,77 +12,85 @@ import _ from 'lodash';
 
 import styles from './SignupScreen.style';
 import { rpc, api, setSignatureProvider } from '../../utilities/eos';
-import { connectUser } from '../../redux/modules';
+import { connectUser, promisify } from '../../redux/modules';
 
 const SignupScreen = props => {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
+  const [spinnerVisible, setSpinnerVisible] = useState(false);
 
   const {
     navigation: { navigate },
   } = props;
 
+  useEffect(() => {
+    _loadKeychain();
+    // _addManager('eumnxtqleuew', 'Manager 1');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const _loadKeychain = async () => {
+    const credentials = await Keychain.getGenericPassword();
+    console.log('Keychain credentials', credentials);
+
+    if (!credentials) {
+      return;
+    }
+
+    const publicKey = ecc.privateToPublic(credentials.password);
+    const profile = {
+      accountName: credentials.username,
+      publicKey,
+    };
+    _getUsersAndNavigate(profile);
+  };
+
   const _handleSignup = async () => {
+    if (!fullName || !phoneNumber || !password) {
+      Alert.alert('Please fill in all fields');
+      return;
+    }
+
     const privateKey = await ecc.randomKey();
     const publicKey = ecc.privateToPublic(privateKey);
 
     console.log('Private key: ', privateKey);
     console.log('Public key: ', publicKey);
 
-    // const signatureProvider = new JsSignatureProvider([
-    //   '5JfZYEuiiDTBmyNBLTAjU4A8uBzrjFVU5cgKaiBLtF5TpwNQzNs',
-    // ]);
-    // setSignatureProvider(signatureProvider);
+    setSpinnerVisible(true);
 
-    // const rpc = new JsonRpc('http://testnet.telos.eostribe.io');
-    // const api = new Api({
-    //   rpc,
-    //   signatureProvider,
-    //   textDecoder: new TextDecoder(),
-    //   textEncoder: new TextEncoder(),
-    // });
+    try {
+      const signupRes = await promisify(props.signup, {
+        full_name: fullName,
+        cell_phone: phoneNumber,
+        public_key: publicKey,
+      });
 
-    // try {
-    //   const result = await api.transact(
-    //     {
-    //       actions: [
-    //         {
-    //           account: 'productloger',
-    //           name: 'addmanager',
-    //           authorization: [
-    //             {
-    //               actor: 'productloger',
-    //               permission: 'active',
-    //             },
-    //           ],
-    //           data: {
-    //             manager: 'juliafodor12',
-    //             description: 'manager 3',
-    //           },
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       blocksBehind: 3,
-    //       expireSeconds: 30,
-    //     },
-    //   );
+      console.log('Sign up response', signupRes);
+      setSpinnerVisible(false);
 
-    //   console.log(result);
-    // } catch (err) {
-    //   console.log('Transaction error', err);
-    // }
+      const accountName = signupRes.chain_name;
+      await Keychain.setGenericPassword(accountName, privateKey);
 
-    const accountName = 'productusr28';
+      const signatureProvider = new JsSignatureProvider([privateKey]);
+      setSignatureProvider(signatureProvider);
 
-    const profile = {
-      fullName: 'Eugene Luzgin',
-      accountName,
-      publicKey,
-      phoneNumber: '+1234567890',
-    };
+      const profile = {
+        fullName,
+        accountName,
+        publicKey,
+        phoneNumber,
+      };
 
+      _getUsersAndNavigate(profile);
+    } catch (err) {
+      console.log('Sign up error', err);
+      setSpinnerVisible(false);
+    }
+  };
+
+  const _getUsersAndNavigate = async profile => {
     try {
       const result = await rpc.get_table_rows({
         json: true,
@@ -93,7 +101,7 @@ const SignupScreen = props => {
       console.log('existing users', result);
       props.setUsers(result.rows);
 
-      const user = _.find(result.rows, { id: accountName });
+      const user = _.find(result.rows, { id: profile.accountName });
       console.log('me', user);
 
       if (!user) {
@@ -109,8 +117,43 @@ const SignupScreen = props => {
     } catch (err) {
       console.log('get users error', err);
     }
+  };
 
-    // props.navigation.navigate('User');
+  const _addManager = async (accountName, description) => {
+    const privateKey = 'master-private-key';
+    const signatureProvider = new JsSignatureProvider([privateKey]);
+    setSignatureProvider(signatureProvider);
+
+    try {
+      const result = await api.transact(
+        {
+          actions: [
+            {
+              account: 'productloger',
+              name: 'addmanager',
+              authorization: [
+                {
+                  actor: 'productloger',
+                  permission: 'active',
+                },
+              ],
+              data: {
+                manager: accountName,
+                description: description,
+              },
+            },
+          ],
+        },
+        {
+          blocksBehind: 3,
+          expireSeconds: 30,
+        },
+      );
+
+      console.log('add manager result', result);
+    } catch (err) {
+      console.log('add manager error', err);
+    }
   };
 
   return (
@@ -139,6 +182,7 @@ const SignupScreen = props => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
+      <Spinner visible={spinnerVisible} />
     </SafeAreaView>
   );
 };
