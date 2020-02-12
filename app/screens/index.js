@@ -1,5 +1,6 @@
 export { SignupScreen } from './Signup';
 
+export { GuestScreen } from './Guest';
 export { ManagerHomeScreen } from './ManagerHome';
 export { AddUserScreen } from './AddUser';
 export { UserDetailScreen } from './UserDetail';

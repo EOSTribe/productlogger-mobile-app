@@ -8,6 +8,11 @@
 
 import React, { useEffect } from 'react';
 import { enableScreens } from 'react-native-screens';
+import { Provider } from 'react-redux';
+
+import createStore from './app/redux/store';
+
+const store = createStore();
 
 import AppContainer from './app/navigation/AppContainer';
 
@@ -16,7 +21,11 @@ const App = props => {
     enableScreens();
   }, []);
 
-  return <AppContainer />;
+  return (
+    <Provider store={store}>
+      <AppContainer />
+    </Provider>
+  );
 };
 
 export default App;

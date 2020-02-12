@@ -9,7 +9,8 @@ const UserProfileView = props => {
   return (
     <View style={[styles.container, props.style]}>
       <Image style={styles.imageView} />
-      <Text style={styles.nameText}>{data.username}</Text>
+      <Text style={styles.fullNameText}>{data.fullName}</Text>
+      <Text style={styles.accountNameText}>[{data.accountName}]</Text>
       <Text style={styles.roleText}>{data.role}</Text>
     </View>
   );
@@ -28,15 +29,20 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     backgroundColor: '#FFF',
   },
-  nameText: {
+  fullNameText: {
     fontSize: 24,
     color: PRIMARY_GRAY_TEXT,
     marginTop: 20,
   },
+  accountNameText: {
+    fontSize: 20,
+    color: PRIMARY_GRAY_TEXT,
+    marginTop: 4,
+  },
   roleText: {
     fontSize: 18,
     color: PRIMARY_GRAY_TEXT,
-    marginTop: 8,
+    marginTop: 4,
   },
 });
 

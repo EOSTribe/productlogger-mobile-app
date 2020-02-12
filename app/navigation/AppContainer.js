@@ -3,6 +3,7 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import AuthStackNavigator from './AuthStack';
 import ManagerStackNavigator from './ManagerStack';
 import UserStackNavigator from './UserStack';
+import { GuestScreen } from '../screens';
 
 const AppContainer = createAppContainer(
   createSwitchNavigator(
@@ -10,6 +11,7 @@ const AppContainer = createAppContainer(
       Auth: AuthStackNavigator,
       Manager: ManagerStackNavigator,
       User: UserStackNavigator,
+      Guest: GuestScreen,
     },
     {
       initialRouteName: 'Auth',

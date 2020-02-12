@@ -8,23 +8,33 @@ import { TextEncoder, TextDecoder } from 'text-encoding';
 
 import ecc from 'eosjs-ecc-rn';
 
+import _ from 'lodash';
+
 import styles from './SignupScreen.style';
+import { rpc, api, setSignatureProvider } from '../../utilities/eos';
+import { connectUser } from '../../redux/modules';
 
 const SignupScreen = props => {
   const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
 
-  const _handleSignup = async () => {
-    // const privateKey = await ecc.randomKey();
-    // const publicKey = ecc.privateToPublic(privateKey);
+  const {
+    navigation: { navigate },
+  } = props;
 
-    // console.log('Private key: ', privateKey);
-    // console.log('Public key: ', publicKey);
+  const _handleSignup = async () => {
+    const privateKey = await ecc.randomKey();
+    const publicKey = ecc.privateToPublic(privateKey);
+
+    console.log('Private key: ', privateKey);
+    console.log('Public key: ', publicKey);
 
     // const signatureProvider = new JsSignatureProvider([
     //   '5JfZYEuiiDTBmyNBLTAjU4A8uBzrjFVU5cgKaiBLtF5TpwNQzNs',
     // ]);
+    // setSignatureProvider(signatureProvider);
+
     // const rpc = new JsonRpc('http://testnet.telos.eostribe.io');
     // const api = new Api({
     //   rpc,
@@ -64,7 +74,43 @@ const SignupScreen = props => {
     //   console.log('Transaction error', err);
     // }
 
-    props.navigation.navigate('User');
+    const accountName = 'productusr28';
+
+    const profile = {
+      fullName: 'Eugene Luzgin',
+      accountName,
+      publicKey,
+      phoneNumber: '+1234567890',
+    };
+
+    try {
+      const result = await rpc.get_table_rows({
+        json: true,
+        code: 'productloger',
+        scope: 'productloger',
+        table: 'user',
+      });
+      console.log('existing users', result);
+      props.setUsers(result.rows);
+
+      const user = _.find(result.rows, { id: accountName });
+      console.log('me', user);
+
+      if (!user) {
+        props.setProfile({ ...profile, role: 'Guest' });
+        navigate('Guest');
+      } else if (user.id === user.manager) {
+        props.setProfile({ ...profile, role: 'Manager' });
+        navigate('Manager');
+      } else {
+        props.setProfile({ ...profile, role: 'User' });
+        navigate('User');
+      }
+    } catch (err) {
+      console.log('get users error', err);
+    }
+
+    // props.navigation.navigate('User');
   };
 
   return (
@@ -78,9 +124,9 @@ const SignupScreen = props => {
         />
         <TextInput
           style={styles.input}
-          placeholder={'Email'}
-          value={email}
-          onChangeText={setEmail}
+          placeholder={'Phone number'}
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
         />
         <TextInput
           style={styles.input}
@@ -97,4 +143,4 @@ const SignupScreen = props => {
   );
 };
 
-export default SignupScreen;
+export default connectUser()(SignupScreen);
