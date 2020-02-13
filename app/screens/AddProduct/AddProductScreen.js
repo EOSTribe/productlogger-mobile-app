@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
 import styles from './AddProductScreen.style';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { logProduct } from '../../utilities/eos';
+import { connectUser } from '../../redux/modules';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const AddProductScreen = props => {
   const {
-    navigation: { navigate },
+    navigation: { navigate, goBack, getParam },
+    userState: { currentUser },
   } = props;
 
+  const [productName, setProductName] = useState('');
+  const [description, setDescription] = useState('');
   const [barCodeData, setBarCodeData] = useState('');
+  const [spinnerVisible, setSpinnerVisible] = useState(false);
 
   const _handleScan = () => {
     navigate('Scanner', { onBarCodeRead: _handleBarCodeRead });
@@ -19,41 +27,83 @@ const AddProductScreen = props => {
     setBarCodeData(data);
   };
 
+  const _handleSave = async () => {
+    if (!productName || !description || !barCodeData) {
+      Alert.alert('Please fill in all fields');
+      return;
+    }
+
+    setSpinnerVisible(true);
+
+    try {
+      const result = await logProduct(
+        currentUser.accountName,
+        productName,
+        description,
+        barCodeData,
+      );
+
+      console.log('log product result', result);
+      setSpinnerVisible(false);
+
+      const onBack = getParam('onBack');
+      if (onBack) {
+        onBack();
+      }
+
+      goBack();
+    } catch (err) {
+      console.log('log product error', err);
+      setSpinnerVisible(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <View style={styles.innerContainer}>
-        <View style={styles.form}>
-          <View style={styles.formHeader}>
-            <Text style={styles.formTitle}>Add New Product</Text>
+      <KeyboardAwareScrollView enableOnAndroid>
+        <View style={styles.innerContainer}>
+          <View style={styles.form}>
+            <View style={styles.formHeader}>
+              <Text style={styles.formTitle}>Add New Product</Text>
+            </View>
+            <View style={styles.formBody}>
+              <Text style={styles.formLabel}>Product Name</Text>
+              <TextInput
+                style={[styles.formInput, styles.nameInput]}
+                value={productName}
+                onChangeText={setProductName}
+              />
+              <Text style={styles.formLabel}>Description</Text>
+              <TextInput
+                style={[styles.formInput, styles.descriptionInput]}
+                multiline={true}
+                value={description}
+                onChangeText={setDescription}
+              />
+              <Text style={styles.formLabel}>RFID Tag</Text>
+              <TextInput
+                style={[styles.formInput, styles.tagInput]}
+                secureTextEntry={true}
+                editable={false}
+                value={barCodeData}
+              />
+              <TouchableOpacity
+                style={[styles.button, styles.scanButton]}
+                onPress={_handleScan}>
+                <Text style={styles.buttonText}>Scan</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.formBody}>
-            <Text style={styles.formLabel}>Product Name</Text>
-            <TextInput style={[styles.formInput, styles.nameInput]} />
-            <Text style={styles.formLabel}>Description</Text>
-            <TextInput
-              style={[styles.formInput, styles.descriptionInput]}
-              multiline={true}
-            />
-            <Text style={styles.formLabel}>RFID Tag</Text>
-            <TextInput
-              style={[styles.formInput, styles.tagInput]}
-              secureTextEntry={true}
-              editable={false}
-              value={barCodeData}
-            />
-            <TouchableOpacity
-              style={[styles.button, styles.scanButton]}
-              onPress={_handleScan}>
-              <Text style={styles.buttonText}>Scan</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={[styles.button, styles.saveButton]}
+            onPress={_handleSave}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={[styles.button, styles.saveButton]}>
-          <Text style={styles.buttonText}>Save</Text>
-        </TouchableOpacity>
-      </View>
+        <Spinner visible={spinnerVisible} />
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
 
-export default AddProductScreen;
+export default connectUser()(AddProductScreen);

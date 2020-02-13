@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   },
   descriptionInput: {
     height: 120,
+    textAlignVertical: 'top',
   },
   tagInput: {
     height: 40,

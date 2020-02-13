@@ -4,6 +4,7 @@ import {
   AddProductScreen,
   AddRecordScreen,
   ScannerScreen,
+  ProductDetailScreen,
 } from '../screens';
 
 const UserStackNavigator = createStackNavigator(
@@ -19,6 +20,9 @@ const UserStackNavigator = createStackNavigator(
     },
     Scanner: {
       screen: ScannerScreen,
+    },
+    ProductDetail: {
+      screen: ProductDetailScreen,
     },
   },
   {

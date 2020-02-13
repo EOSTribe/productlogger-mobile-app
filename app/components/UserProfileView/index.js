@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import { LIGHT_GRAY_BACK, PRIMARY_GRAY_TEXT } from '../../theme/colors';
 
@@ -8,7 +8,6 @@ const UserProfileView = props => {
 
   return (
     <View style={[styles.container, props.style]}>
-      <Image style={styles.imageView} />
       <Text style={styles.titleText}>{data.title}</Text>
       {data.subTitle && (
         <Text style={styles.subTitleText}>[{data.subTitle}]</Text>
@@ -36,7 +35,6 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 24,
     color: PRIMARY_GRAY_TEXT,
-    marginTop: 20,
   },
   subTitleText: {
     fontSize: 20,

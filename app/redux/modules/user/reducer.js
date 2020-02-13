@@ -1,6 +1,6 @@
 // @flow
 
-import { SET_PROFILE, SET_USERS } from './actions';
+import { SET_PROFILE, SET_USERS, SET_PRODUCTS } from './actions';
 import { defaultReducers } from '../defaultReducers';
 
 const DEFAULT = defaultReducers.userState;
@@ -21,6 +21,11 @@ export default function userState(state = DEFAULT, action = {}) {
       return {
         ...state,
         users: payload,
+      };
+    case SET_PRODUCTS:
+      return {
+        ...state,
+        products: payload,
       };
     default:
       return state;

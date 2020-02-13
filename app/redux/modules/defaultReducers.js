@@ -9,6 +9,7 @@ const userState = {
     role: '',
   },
   users: [],
+  products: [],
 };
 
 export const defaultReducers = {

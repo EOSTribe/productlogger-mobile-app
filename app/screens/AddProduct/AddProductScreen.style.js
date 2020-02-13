@@ -48,10 +48,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   nameInput: {
-    height: 40,
+    height: 48,
   },
   descriptionInput: {
     height: 80,
+    textAlignVertical: 'top',
   },
   tagInput: {
     height: 48,
