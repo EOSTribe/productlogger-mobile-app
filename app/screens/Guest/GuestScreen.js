@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import RadioButton from 'react-native-radio-button';
 import _ from 'lodash';
@@ -51,7 +51,14 @@ const ManagerHomeScreen = props => {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.innerContainer}>
-        <UserProfileView data={currentUser} style={styles.profileView} />
+        <UserProfileView
+          data={{
+            title: currentUser.fullName,
+            subTitle: currentUser.accountName,
+            description: currentUser.role,
+          }}
+          style={styles.profileView}
+        />
         <Text style={styles.listTitleText}>Managers</Text>
         <FlatList
           data={managers}

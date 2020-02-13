@@ -1,5 +1,4 @@
-import { Api, JsonRpc, RpcError } from 'eosjs-rn';
-import { JsSignatureProvider } from 'eosjs-rn/dist/eosjs-jssig';
+import { Api, JsonRpc } from 'eosjs-rn';
 import { TextEncoder, TextDecoder } from 'text-encoding';
 
 const rpc = new JsonRpc('http://testnet.telos.eostribe.io');

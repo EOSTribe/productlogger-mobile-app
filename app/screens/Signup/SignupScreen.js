@@ -38,7 +38,11 @@ const SignupScreen = props => {
       return;
     }
 
-    const publicKey = ecc.privateToPublic(credentials.password);
+    const privateKey = credentials.password;
+    const publicKey = ecc.privateToPublic(privateKey);
+    const signatureProvider = new JsSignatureProvider([privateKey]);
+    setSignatureProvider(signatureProvider);
+
     const profile = {
       accountName: credentials.username,
       publicKey,

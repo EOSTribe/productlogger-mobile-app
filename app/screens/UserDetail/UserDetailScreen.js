@@ -1,25 +1,74 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Switch } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import styles from './UserDetailScreen.style';
 import UserProfileView from '../../components/UserProfileView';
 import { DARK_GRAY_BACK } from '../../theme/colors';
+import { api } from '../../utilities/eos';
+import { connectUser } from '../../redux/modules';
 
 const UserDetailScreen = props => {
-  const { navigation } = props;
+  const {
+    navigation: { goBack, getParam },
+    userState: { currentUser },
+  } = props;
 
   const [enabled, setEnabled] = useState(false);
-  const userData = navigation.getParam('user', {});
+  const [spinnerVisible, setSpinnerVisible] = useState(false);
+  const userData = getParam('user', {});
 
-  const _handleDelete = () => {
-    navigation.goBack();
+  const _handleDelete = async () => {
+    setSpinnerVisible(true);
+
+    try {
+      const result = await api.transact(
+        {
+          actions: [
+            {
+              account: 'productloger',
+              name: 'rmuser',
+              authorization: [
+                {
+                  actor: currentUser.accountName,
+                  permission: 'active',
+                },
+              ],
+              data: {
+                user: userData.id,
+              },
+            },
+          ],
+        },
+        {
+          blocksBehind: 3,
+          expireSeconds: 30,
+        },
+      );
+
+      console.log('delete user result', result);
+      setSpinnerVisible(false);
+
+      const onBack = getParam('onBack');
+      if (onBack) {
+        onBack();
+      }
+
+      goBack();
+    } catch (err) {
+      console.log('delete user error', err);
+      setSpinnerVisible(false);
+    }
   };
 
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.innerContainer}>
-        <UserProfileView data={userData} style={styles.profileView} />
+        <UserProfileView
+          data={{ ...userData, title: userData.id }}
+          style={styles.profileView}
+        />
         <View style={styles.switchWrapper}>
           <Switch
             value={enabled}
@@ -32,8 +81,9 @@ const UserDetailScreen = props => {
           <Text style={styles.deleteButtonText}>Delete User</Text>
         </TouchableOpacity>
       </View>
+      <Spinner visible={spinnerVisible} />
     </SafeAreaView>
   );
 };
 
-export default UserDetailScreen;
+export default connectUser()(UserDetailScreen);
