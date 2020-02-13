@@ -55,10 +55,13 @@ const UserHomeScreen = props => {
   };
 
   useEffect(() => {
-    const filtered = _.filter(
-      products,
-      item => item.creator === currentUser.accountName,
-    );
+    const filtered = _.filter(products, item => {
+      console.log(item.owners);
+      return _.find(
+        item.owners,
+        owner => owner.owner === currentUser.managerName,
+      );
+    });
     setManagedProducts(filtered);
   }, [currentUser, products]);
 

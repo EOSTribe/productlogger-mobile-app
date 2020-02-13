@@ -1,43 +1,130 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import _ from 'lodash';
 
 import styles from './ManagerHomeScreen.style';
 import UserProfileView from '../../components/UserProfileView';
-import { SECONDARY_GRAY_TEXT } from '../../theme/colors';
+import { SECONDARY_GRAY_TEXT, DARK_GRAY_BACK } from '../../theme/colors';
 import { connectUser } from '../../redux/modules';
-import { rpc } from '../../utilities/eos';
+import { getTableRows } from '../../utilities/eos';
 
 const UserListItem = props => {
   const { data, onPress } = props;
   return (
     <TouchableOpacity onPress={() => onPress(data)}>
       <View style={styles.listItem}>
-        <Image style={styles.listItemImage} />
+        <Icon name={'ios-person'} color={SECONDARY_GRAY_TEXT} size={20} />
         <Text style={styles.listItemText}>
           {data.id} [{data.description}]
         </Text>
-        <Icon name="ios-arrow-forward" color={SECONDARY_GRAY_TEXT} />
+        <Icon name="ios-arrow-forward" color={SECONDARY_GRAY_TEXT} size={20} />
       </View>
     </TouchableOpacity>
   );
 };
 
+const ProductListItem = props => {
+  const { data, onPress } = props;
+  return (
+    <TouchableOpacity onPress={() => onPress(data)}>
+      <View style={styles.listItem}>
+        <Icon name={'ios-pricetags'} color={SECONDARY_GRAY_TEXT} size={20} />
+        <Text style={styles.listItemText}>{data.productname}</Text>
+        <Icon
+          name={'ios-arrow-forward'}
+          color={SECONDARY_GRAY_TEXT}
+          size={20}
+        />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+const _renderTabBar = props => (
+  <TabBar
+    {...props}
+    indicatorStyle={styles.tabBarIndicator}
+    style={{ backgroundColor: DARK_GRAY_BACK }}
+  />
+);
+
 const ManagerHomeScreen = props => {
   const {
     navigation: { navigate },
-    userState: { users, currentUser },
+    userState: { users, products, currentUser },
   } = props;
 
+  const [tabIndex, setTabIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'users', title: 'Users' },
+    { key: 'products', title: 'Products' },
+  ]);
   const [managedUsers, setManagedUsers] = useState([]);
+  const [managedProducts, setManagedProducts] = useState([]);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
 
-  const _handlePressUserItem = data => {
-    navigate('UserDetail', { user: data, onBack: _reloadUsers });
+  const UsersView = () => {
+    return (
+      <View style={styles.tabView}>
+        <FlatList
+          data={managedUsers}
+          renderItem={({ item, index }) => (
+            <UserListItem data={item} onPress={_handlePressUserItem} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+        />
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => navigate('AddUser', { onBack: _loadUsers })}>
+          <Text style={styles.addButtonText}>Add new user</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
+
+  const ProductsView = () => {
+    return (
+      <View style={styles.tabView}>
+        <FlatList
+          data={managedProducts}
+          renderItem={({ item, index }) => (
+            <ProductListItem data={item} onPress={_handlePressProductItem} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+    );
+  };
+
+  const renderScene = SceneMap({
+    users: UsersView,
+    products: ProductsView,
+  });
+
+  const _handlePressUserItem = data => {
+    navigate('UserDetail', { user: data, onBack: _loadUsers });
+  };
+
+  const _handlePressProductItem = data => {
+    navigate('ProductDetail', { product: data, readOnly: true });
+  };
+
+  useEffect(() => {
+    _loadProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const filtered = _.filter(
@@ -48,21 +135,41 @@ const ManagerHomeScreen = props => {
     setManagedUsers(filtered);
   }, [currentUser.accountName, users]);
 
-  const _reloadUsers = async () => {
+  useEffect(() => {
+    const filtered = _.filter(products, item => {
+      console.log(item.owners);
+      return _.find(
+        item.owners,
+        owner => owner.owner === currentUser.accountName,
+      );
+    });
+    setManagedProducts(filtered);
+  }, [currentUser.accountName, products]);
+
+  const _loadUsers = async () => {
     setSpinnerVisible(true);
 
     try {
-      const result = await rpc.get_table_rows({
-        json: true,
-        code: 'productloger',
-        scope: 'productloger',
-        table: 'user',
-      });
-      console.log('existing users', result);
+      const result = await getTableRows('user');
+      console.log('existing users', result.rows);
       setSpinnerVisible(false);
       props.setUsers(result.rows);
     } catch (err) {
       console.log('get users error', err);
+      setSpinnerVisible(false);
+    }
+  };
+
+  const _loadProducts = async () => {
+    setSpinnerVisible(true);
+
+    try {
+      const result = await getTableRows('product');
+      console.log('existing products', result.rows);
+      setSpinnerVisible(false);
+      props.setProducts(result.rows);
+    } catch (err) {
+      console.log('get products error', err);
       setSpinnerVisible(false);
     }
   };
@@ -78,20 +185,13 @@ const ManagerHomeScreen = props => {
           }}
           style={styles.profileView}
         />
-        <Text style={styles.listTitleText}>Users</Text>
-        <FlatList
-          data={managedUsers}
-          renderItem={({ item, index }) => (
-            <UserListItem data={item} onPress={_handlePressUserItem} />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
+        <TabView
+          navigationState={{ index: tabIndex, routes }}
+          renderScene={renderScene}
+          onIndexChange={setTabIndex}
+          initialLayout={{ width: Dimensions.get('window').width }}
+          renderTabBar={_renderTabBar}
         />
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigate('AddUser', { onBack: _reloadUsers })}>
-          <Text style={styles.addButtonText}>+ Add new user</Text>
-        </TouchableOpacity>
       </View>
       <Spinner visible={spinnerVisible} />
     </SafeAreaView>

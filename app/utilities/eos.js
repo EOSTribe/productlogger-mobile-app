@@ -23,6 +23,87 @@ const getTableRows = table => {
   });
 };
 
+const addManager = (accountName, description) => {
+  return api.transact(
+    {
+      actions: [
+        {
+          account: 'productloger',
+          name: 'addmanager',
+          authorization: [
+            {
+              actor: 'productloger',
+              permission: 'active',
+            },
+          ],
+          data: {
+            manager: accountName,
+            description: description,
+          },
+        },
+      ],
+    },
+    {
+      blocksBehind: 3,
+      expireSeconds: 30,
+    },
+  );
+};
+
+const addUser = (managerName, accountName, description) => {
+  return api.transact(
+    {
+      actions: [
+        {
+          account: 'productloger',
+          name: 'adduser',
+          authorization: [
+            {
+              actor: managerName,
+              permission: 'active',
+            },
+          ],
+          data: {
+            user: accountName,
+            manager: managerName,
+            description: description,
+          },
+        },
+      ],
+    },
+    {
+      blocksBehind: 3,
+      expireSeconds: 30,
+    },
+  );
+};
+
+const removeUser = (managerName, userId) => {
+  return api.transact(
+    {
+      actions: [
+        {
+          account: 'productloger',
+          name: 'rmuser',
+          authorization: [
+            {
+              actor: managerName,
+              permission: 'active',
+            },
+          ],
+          data: {
+            user: userId,
+          },
+        },
+      ],
+    },
+    {
+      blocksBehind: 3,
+      expireSeconds: 30,
+    },
+  );
+};
+
 const logRecord = (accountName, productId, description) => {
   return api.transact(
     {
@@ -80,4 +161,14 @@ const logProduct = (accountName, productName, description, productTab) => {
   );
 };
 
-export { rpc, api, setSignatureProvider, getTableRows, logRecord, logProduct };
+export {
+  rpc,
+  api,
+  setSignatureProvider,
+  getTableRows,
+  logRecord,
+  logProduct,
+  addManager,
+  addUser,
+  removeUser,
+};

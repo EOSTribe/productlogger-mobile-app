@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-navigation';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import styles from './AddUserScreen.style';
-import { api } from '../../utilities/eos';
+import { addUser } from '../../utilities/eos';
 import { connectUser } from '../../redux/modules';
 
 const AddUserScreen = props => {
@@ -21,30 +21,10 @@ const AddUserScreen = props => {
     setSpinnerVisible(true);
 
     try {
-      const result = await api.transact(
-        {
-          actions: [
-            {
-              account: 'productloger',
-              name: 'adduser',
-              authorization: [
-                {
-                  actor: currentUser.accountName,
-                  permission: 'active',
-                },
-              ],
-              data: {
-                user: username,
-                manager: currentUser.accountName,
-                description: description,
-              },
-            },
-          ],
-        },
-        {
-          blocksBehind: 3,
-          expireSeconds: 30,
-        },
+      const result = await addUser(
+        currentUser.accountName,
+        username,
+        description,
       );
 
       console.log('add user result', result);
@@ -75,6 +55,7 @@ const AddUserScreen = props => {
               style={styles.formInput}
               value={username}
               onChangeText={setUsername}
+              autoCapitalize={'none'}
             />
             <Text style={styles.formLabel}>Description</Text>
             <TextInput

@@ -4,6 +4,7 @@ import {
   LIGHT_GRAY_BACK,
   PRIMARY_GRAY_TEXT,
   SECONDARY_GRAY_TEXT,
+  DARK_GRAY_BACK,
 } from '../../theme/colors';
 
 const styles = StyleSheet.create({
@@ -15,7 +16,13 @@ const styles = StyleSheet.create({
   },
   profileView: {
     marginHorizontal: 40,
-    marginTop: 20,
+    marginVertical: 20,
+  },
+  tabView: {
+    flex: 1,
+  },
+  tabBarIndicator: {
+    backgroundColor: '#FFF',
   },
   listTitleText: {
     fontSize: 24,
@@ -45,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   addButton: {
-    backgroundColor: LIGHT_GRAY_BACK,
+    backgroundColor: DARK_GRAY_BACK,
     height: 51,
     alignItems: 'center',
     justifyContent: 'center',
@@ -53,7 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   addButtonText: {
-    color: SECONDARY_GRAY_TEXT,
+    color: '#FFF',
     fontSize: 24,
   },
 });

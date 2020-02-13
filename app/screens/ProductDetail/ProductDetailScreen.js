@@ -38,6 +38,7 @@ const ProductDetailScreen = props => {
   } = props;
 
   const [product, setProduct] = useState(getParam('product'));
+  const readOnly = getParam('readOnly');
 
   const _loadProducts = async () => {
     try {
@@ -69,6 +70,7 @@ const ProductDetailScreen = props => {
         <UserProfileView
           data={{
             title: product.productname,
+            subTitle: product.creator,
             description: `Tag: ${product.tag}`,
           }}
           style={styles.profileView}
@@ -82,9 +84,11 @@ const ProductDetailScreen = props => {
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
         />
-        <TouchableOpacity style={styles.button} onPress={_handleAddRecord}>
-          <Text style={styles.buttonText}>Add record</Text>
-        </TouchableOpacity>
+        {!readOnly && (
+          <TouchableOpacity style={styles.button} onPress={_handleAddRecord}>
+            <Text style={styles.buttonText}>Add record</Text>
+          </TouchableOpacity>
+        )}
         {/* <TouchableOpacity
           style={styles.button}
           onPress={() => navigate('AddRecord')}>

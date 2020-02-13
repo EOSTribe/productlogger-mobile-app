@@ -1,5 +1,10 @@
 import { createStackNavigator } from 'react-navigation-stack';
-import { ManagerHomeScreen, AddUserScreen, UserDetailScreen } from '../screens';
+import {
+  ManagerHomeScreen,
+  AddUserScreen,
+  UserDetailScreen,
+  ProductDetailScreen,
+} from '../screens';
 
 const ManagerStackNavigator = createStackNavigator(
   {
@@ -11,6 +16,9 @@ const ManagerStackNavigator = createStackNavigator(
     },
     UserDetail: {
       screen: UserDetailScreen,
+    },
+    ProductDetail: {
+      screen: ProductDetailScreen,
     },
   },
   {

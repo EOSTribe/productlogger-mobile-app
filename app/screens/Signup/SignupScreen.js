@@ -11,7 +11,11 @@ import ecc from 'eosjs-ecc-rn';
 import _ from 'lodash';
 
 import styles from './SignupScreen.style';
-import { rpc, api, setSignatureProvider } from '../../utilities/eos';
+import {
+  setSignatureProvider,
+  getTableRows,
+  addManager,
+} from '../../utilities/eos';
 import { connectUser, promisify } from '../../redux/modules';
 
 const SignupScreen = props => {
@@ -96,12 +100,7 @@ const SignupScreen = props => {
 
   const _getUsersAndNavigate = async profile => {
     try {
-      const result = await rpc.get_table_rows({
-        json: true,
-        code: 'productloger',
-        scope: 'productloger',
-        table: 'user',
-      });
+      const result = await getTableRows('user');
       console.log('existing users', result);
       props.setUsers(result.rows);
 
@@ -112,10 +111,18 @@ const SignupScreen = props => {
         props.setProfile({ ...profile, role: 'Guest' });
         navigate('Guest');
       } else if (user.id === user.manager) {
-        props.setProfile({ ...profile, role: 'Manager' });
+        props.setProfile({
+          ...profile,
+          role: 'Manager',
+          managerName: user.manager,
+        });
         navigate('Manager');
       } else {
-        props.setProfile({ ...profile, role: 'User' });
+        props.setProfile({
+          ...profile,
+          role: 'User',
+          managerName: user.manager,
+        });
         navigate('User');
       }
     } catch (err) {
@@ -129,30 +136,7 @@ const SignupScreen = props => {
     setSignatureProvider(signatureProvider);
 
     try {
-      const result = await api.transact(
-        {
-          actions: [
-            {
-              account: 'productloger',
-              name: 'addmanager',
-              authorization: [
-                {
-                  actor: 'productloger',
-                  permission: 'active',
-                },
-              ],
-              data: {
-                manager: accountName,
-                description: description,
-              },
-            },
-          ],
-        },
-        {
-          blocksBehind: 3,
-          expireSeconds: 30,
-        },
-      );
+      const result = await addManager(accountName, description);
 
       console.log('add manager result', result);
     } catch (err) {

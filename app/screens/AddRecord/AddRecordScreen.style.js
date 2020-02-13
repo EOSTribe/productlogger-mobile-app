@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   formInput: {
     backgroundColor: '#FFF',
     fontSize: 18,
-    height: 40,
+    height: 48,
     paddingHorizontal: 8,
     marginTop: 8,
   },
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   tagInput: {
-    height: 40,
+    height: 48,
   },
   button: {
     backgroundColor: DARK_GRAY_BACK,

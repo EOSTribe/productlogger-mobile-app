@@ -6,7 +6,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import styles from './UserDetailScreen.style';
 import UserProfileView from '../../components/UserProfileView';
 import { DARK_GRAY_BACK } from '../../theme/colors';
-import { api } from '../../utilities/eos';
+import { removeUser } from '../../utilities/eos';
 import { connectUser } from '../../redux/modules';
 
 const UserDetailScreen = props => {
@@ -23,29 +23,7 @@ const UserDetailScreen = props => {
     setSpinnerVisible(true);
 
     try {
-      const result = await api.transact(
-        {
-          actions: [
-            {
-              account: 'productloger',
-              name: 'rmuser',
-              authorization: [
-                {
-                  actor: currentUser.accountName,
-                  permission: 'active',
-                },
-              ],
-              data: {
-                user: userData.id,
-              },
-            },
-          ],
-        },
-        {
-          blocksBehind: 3,
-          expireSeconds: 30,
-        },
-      );
+      const result = await removeUser(currentUser.accountName, userData.id);
 
       console.log('delete user result', result);
       setSpinnerVisible(false);
