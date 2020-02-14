@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import Toast from 'react-native-root-toast';
 import _ from 'lodash';
 
 import styles from './ManagerHomeScreen.style';
@@ -155,7 +156,7 @@ const ManagerHomeScreen = props => {
       setSpinnerVisible(false);
       props.setUsers(result.rows);
     } catch (err) {
-      console.log('get users error', err);
+      Toast.show(err.message || 'Something went wrong');
       setSpinnerVisible(false);
     }
   };
@@ -169,7 +170,7 @@ const ManagerHomeScreen = props => {
       setSpinnerVisible(false);
       props.setProducts(result.rows);
     } catch (err) {
-      console.log('get products error', err);
+      Toast.show(err.message || 'Something went wrong');
       setSpinnerVisible(false);
     }
   };

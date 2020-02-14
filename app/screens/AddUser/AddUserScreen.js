@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Toast from 'react-native-root-toast';
 
 import styles from './AddUserScreen.style';
 import { addUser } from '../../utilities/eos';
@@ -37,7 +38,7 @@ const AddUserScreen = props => {
 
       goBack();
     } catch (err) {
-      console.log('add user error', err);
+      Toast.show(err.message || 'Something went wrong');
       setSpinnerVisible(false);
     }
   };

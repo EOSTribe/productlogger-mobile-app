@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Switch } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Toast from 'react-native-root-toast';
 
 import styles from './UserDetailScreen.style';
 import UserProfileView from '../../components/UserProfileView';
@@ -35,7 +36,7 @@ const UserDetailScreen = props => {
 
       goBack();
     } catch (err) {
-      console.log('delete user error', err);
+      Toast.show(err.message || 'Something went wrong');
       setSpinnerVisible(false);
     }
   };

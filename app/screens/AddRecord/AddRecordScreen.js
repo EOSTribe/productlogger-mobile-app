@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import Toast from 'react-native-root-toast';
 
 import styles from './AddRecordScreen.style';
 import { connectUser } from '../../redux/modules';
@@ -52,7 +53,7 @@ const AddRecordScreen = props => {
 
       goBack();
     } catch (err) {
-      console.log('log record error', err);
+      Toast.show(err.message || 'Something went wrong');
       setSpinnerVisible(false);
     }
   };

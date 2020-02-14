@@ -3,6 +3,7 @@ import { View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Spinner from 'react-native-loading-spinner-overlay';
 import * as Keychain from 'react-native-keychain';
+import Toast from 'react-native-root-toast';
 
 import { JsSignatureProvider } from 'eosjs-rn/dist/eosjs-jssig';
 
@@ -93,7 +94,7 @@ const SignupScreen = props => {
 
       _getUsersAndNavigate(profile);
     } catch (err) {
-      console.log('Sign up error', err);
+      Toast.show(err.message || 'Something went wrong');
       setSpinnerVisible(false);
     }
   };
@@ -126,7 +127,7 @@ const SignupScreen = props => {
         navigate('User');
       }
     } catch (err) {
-      console.log('get users error', err);
+      Toast.show(err.message || 'Something went wrong');
     }
   };
 

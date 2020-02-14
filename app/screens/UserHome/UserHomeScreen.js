@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Toast from 'react-native-root-toast';
 import _ from 'lodash';
 
 import styles from './UserHomeScreen.style';
@@ -46,7 +47,7 @@ const UserHomeScreen = props => {
       console.log('existing products', result.rows);
       props.setProducts(result.rows);
     } catch (err) {
-      console.log('get products error', err);
+      Toast.show(err.message || 'Something went wrong');
     }
   };
 

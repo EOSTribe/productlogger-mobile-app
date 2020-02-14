@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import Toast from 'react-native-root-toast';
 
 import styles from './AddProductScreen.style';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -53,7 +54,7 @@ const AddProductScreen = props => {
 
       goBack();
     } catch (err) {
-      console.log('log product error', err);
+      Toast.show(err.message || 'Something went wrong');
       setSpinnerVisible(false);
     }
   };
