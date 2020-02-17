@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import RadioButton from 'react-native-radio-button';
+import Toast from 'react-native-root-toast';
+import Spinner from 'react-native-loading-spinner-overlay';
 import _ from 'lodash';
 
 import styles from './GuestScreen.style';
 import UserProfileView from '../../components/UserProfileView';
 import { DARK_GRAY_BACK } from '../../theme/colors';
-import { connectUser } from '../../redux/modules';
+import { connectUser, promisify } from '../../redux/modules';
 
 const ManagerListItem = props => {
   const { data, onPress, isSelected } = props;
@@ -32,6 +34,7 @@ const ManagerHomeScreen = props => {
     userState: { users, currentUser },
   } = props;
 
+  const [spinnerVisible, setSpinnerVisible] = useState(false);
   const [managers, setManagers] = useState([]);
   const [selectedManager, setSelectedManager] = useState(null);
 
@@ -39,8 +42,26 @@ const ManagerHomeScreen = props => {
     setSelectedManager(data);
   };
 
-  const _handleRequestAccess = () => {
-    console.log('request access pressed');
+  const _handleRequestAccess = async () => {
+    if (!selectedManager) {
+      Toast.show('Please select a manager');
+      return;
+    }
+
+    setSpinnerVisible(true);
+
+    try {
+      let response = await promisify(props.requestAccess, {
+        manager_name: selectedManager.id,
+        user_name: currentUser.accountName,
+      });
+      console.log('request access response', response);
+      setSpinnerVisible(false);
+      Toast.show('Request sent successfully');
+    } catch (e) {
+      setSpinnerVisible(false);
+      Toast.show(e.message || 'Something went wrong');
+    }
   };
 
   useEffect(() => {
@@ -74,10 +95,11 @@ const ManagerHomeScreen = props => {
         />
         <TouchableOpacity
           style={styles.requestButton}
-          onPress={() => _handleRequestAccess}>
+          onPress={_handleRequestAccess}>
           <Text style={styles.requestButtonText}>Request Access</Text>
         </TouchableOpacity>
       </View>
+      <Spinner visible={spinnerVisible} />
     </SafeAreaView>
   );
 };

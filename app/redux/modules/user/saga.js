@@ -2,9 +2,13 @@
 
 import { take, put, call, fork, all } from 'redux-saga/effects';
 
-import { userActionCreators, SIGNUP_ATTEMPT } from './actions';
+import {
+  userActionCreators,
+  SIGNUP_ATTEMPT,
+  REQUEST_ACCESS_ATTEMPT,
+} from './actions';
 
-import { register } from './connections';
+import { register, requestAccess } from './connections';
 
 export function* asyncSignupAttempt({ payload, resolve, reject }) {
   try {
@@ -27,6 +31,28 @@ export function* watchSignupAttempt() {
   }
 }
 
+export function* asyncRequestAccessAttempt({ payload, resolve, reject }) {
+  try {
+    const response = yield call(requestAccess, payload);
+    if (response.error) {
+      reject(response.err);
+    } else {
+      yield put(userActionCreators.requestAccessSuccess(response));
+      resolve(response);
+    }
+  } catch (error) {
+    reject(error);
+  }
+}
+
+export function* watchRequestAccessAttempt() {
+  while (true) {
+    const action = yield take(REQUEST_ACCESS_ATTEMPT);
+    yield* asyncRequestAccessAttempt(action);
+  }
+}
+
 export default function*() {
   yield all([fork(watchSignupAttempt)]);
+  yield all([fork(watchRequestAccessAttempt)]);
 }
