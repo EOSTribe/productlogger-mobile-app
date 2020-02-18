@@ -6,9 +6,10 @@ import {
   userActionCreators,
   SIGNUP_ATTEMPT,
   REQUEST_ACCESS_ATTEMPT,
+  GET_ACCESS_REQUESTS_ATTEMPT,
 } from './actions';
 
-import { register, requestAccess } from './connections';
+import { register, requestAccess, getAccessRequests } from './connections';
 
 export function* asyncSignupAttempt({ payload, resolve, reject }) {
   try {
@@ -52,7 +53,29 @@ export function* watchRequestAccessAttempt() {
   }
 }
 
+export function* asyncGetAccessRequestsAttempt({ payload, resolve, reject }) {
+  try {
+    const response = yield call(getAccessRequests, payload);
+    if (response.error) {
+      reject(response.err);
+    } else {
+      yield put(userActionCreators.getAccessRequestsSuccess(response));
+      resolve(response);
+    }
+  } catch (error) {
+    reject(error);
+  }
+}
+
+export function* watchGetAccessRequestsAttempt() {
+  while (true) {
+    const action = yield take(GET_ACCESS_REQUESTS_ATTEMPT);
+    yield* asyncGetAccessRequestsAttempt(action);
+  }
+}
+
 export default function*() {
   yield all([fork(watchSignupAttempt)]);
   yield all([fork(watchRequestAccessAttempt)]);
+  yield all([fork(watchGetAccessRequestsAttempt)]);
 }

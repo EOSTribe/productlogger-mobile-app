@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -17,6 +17,14 @@ const AddUserScreen = props => {
     userState: { currentUser },
     navigation: { goBack, getParam },
   } = props;
+
+  useEffect(() => {
+    const request = getParam('request');
+    if (request) {
+      setUsername(request.user_name);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const _handleAddUser = async () => {
     setSpinnerVisible(true);

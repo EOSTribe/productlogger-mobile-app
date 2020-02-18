@@ -10,6 +10,7 @@ const userState = {
   },
   users: [],
   products: [],
+  requests: [],
 };
 
 export const defaultReducers = {

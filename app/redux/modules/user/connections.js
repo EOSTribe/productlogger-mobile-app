@@ -57,3 +57,34 @@ export const requestAccess = async params => {
     };
   }
 };
+
+export const getAccessRequests = async params => {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  };
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/requests?manager_name=${params.managerName}`,
+      options,
+    );
+    const responseJson = await response.json();
+    if (response.status === 200) {
+      return responseJson;
+    }
+    return {
+      error: true,
+      status: response.status,
+      err: responseJson,
+    };
+  } catch (err) {
+    return {
+      error: true,
+      msg: 'Network error',
+      err,
+    };
+  }
+};

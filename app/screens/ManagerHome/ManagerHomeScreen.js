@@ -16,7 +16,7 @@ import _ from 'lodash';
 import styles from './ManagerHomeScreen.style';
 import UserProfileView from '../../components/UserProfileView';
 import { SECONDARY_GRAY_TEXT, DARK_GRAY_BACK } from '../../theme/colors';
-import { connectUser } from '../../redux/modules';
+import { connectUser, promisify } from '../../redux/modules';
 import { getTableRows } from '../../utilities/eos';
 
 const UserListItem = props => {
@@ -51,6 +51,23 @@ const ProductListItem = props => {
   );
 };
 
+const RequestListItem = props => {
+  const { data, onPress } = props;
+  return (
+    <TouchableOpacity onPress={() => onPress(data)}>
+      <View style={styles.listItem}>
+        <Icon name={'ios-person'} color={SECONDARY_GRAY_TEXT} size={20} />
+        <Text style={styles.listItemText}>{data.user_name}</Text>
+        <Icon
+          name={'ios-arrow-forward'}
+          color={SECONDARY_GRAY_TEXT}
+          size={20}
+        />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 const _renderTabBar = props => (
   <TabBar
     {...props}
@@ -62,13 +79,14 @@ const _renderTabBar = props => (
 const ManagerHomeScreen = props => {
   const {
     navigation: { navigate },
-    userState: { users, products, currentUser },
+    userState: { users, products, requests, currentUser },
   } = props;
 
   const [tabIndex, setTabIndex] = useState(0);
   const [routes] = useState([
     { key: 'users', title: 'Users' },
     { key: 'products', title: 'Products' },
+    { key: 'requests', title: 'Requests' },
   ]);
   const [managedUsers, setManagedUsers] = useState([]);
   const [managedProducts, setManagedProducts] = useState([]);
@@ -109,9 +127,25 @@ const ManagerHomeScreen = props => {
     );
   };
 
+  const RequestsView = () => {
+    return (
+      <View style={styles.tabView}>
+        <FlatList
+          data={requests}
+          renderItem={({ item, index }) => (
+            <RequestListItem data={item} onPress={_handlePressRequestItem} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+    );
+  };
+
   const renderScene = SceneMap({
     users: UsersView,
     products: ProductsView,
+    requests: RequestsView,
   });
 
   const _handlePressUserItem = data => {
@@ -122,8 +156,13 @@ const ManagerHomeScreen = props => {
     navigate('ProductDetail', { product: data, readOnly: true });
   };
 
+  const _handlePressRequestItem = data => {
+    navigate('AddUser', { request: data, onBack: _loadUsers });
+  };
+
   useEffect(() => {
     _loadProducts();
+    _loadAccessRequests();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -169,6 +208,21 @@ const ManagerHomeScreen = props => {
       console.log('existing products', result.rows);
       setSpinnerVisible(false);
       props.setProducts(result.rows);
+    } catch (err) {
+      Toast.show(err.message || 'Something went wrong');
+      setSpinnerVisible(false);
+    }
+  };
+
+  const _loadAccessRequests = async () => {
+    setSpinnerVisible(true);
+
+    try {
+      const result = await promisify(props.getAccessRequests, {
+        managerName: currentUser.accountName,
+      });
+      console.log('access requets', result);
+      setSpinnerVisible(false);
     } catch (err) {
       Toast.show(err.message || 'Something went wrong');
       setSpinnerVisible(false);
