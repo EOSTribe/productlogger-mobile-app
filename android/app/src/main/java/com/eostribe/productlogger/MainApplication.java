@@ -1,4 +1,4 @@
-package com.productlogger;
+package com.eostribe.productlogger;
 
 import android.app.Application;
 import android.content.Context;
