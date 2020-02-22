@@ -10,6 +10,7 @@ import styles from './GuestScreen.style';
 import UserProfileView from '../../components/UserProfileView';
 import { DARK_GRAY_BACK } from '../../theme/colors';
 import { connectUser, promisify } from '../../redux/modules';
+import { getTableRows } from '../../utilities/eos';
 
 const ManagerListItem = props => {
   const { data, onPress, isSelected } = props;
@@ -32,6 +33,7 @@ const ManagerListItem = props => {
 const ManagerHomeScreen = props => {
   const {
     userState: { users, currentUser },
+    navigation: { navigate },
   } = props;
 
   const [spinnerVisible, setSpinnerVisible] = useState(false);
@@ -64,10 +66,47 @@ const ManagerHomeScreen = props => {
     }
   };
 
+  const _handleReload = () => {
+    _getUsersAndNavigate();
+  };
+
   useEffect(() => {
     const filtered = _.filter(users, item => item.id === item.manager);
     setManagers(filtered);
   }, [users]);
+
+  const _getUsersAndNavigate = async () => {
+    try {
+      const result = await getTableRows('user');
+      console.log('existing users', result);
+      props.setUsers(result.rows);
+
+      const user = _.find(result.rows, { id: currentUser.accountName });
+      console.log('me', user);
+
+      if (!user) {
+        return;
+      }
+
+      if (user.id === user.manager) {
+        props.setProfile({
+          ...currentUser,
+          role: 'Manager',
+          managerName: user.manager,
+        });
+        navigate('Manager');
+      } else {
+        props.setProfile({
+          ...currentUser,
+          role: 'User',
+          managerName: user.manager,
+        });
+        navigate('User');
+      }
+    } catch (err) {
+      Toast.show(err.message || 'Something went wrong');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -94,9 +133,12 @@ const ManagerHomeScreen = props => {
           showsVerticalScrollIndicator={false}
         />
         <TouchableOpacity
-          style={styles.requestButton}
-          onPress={_handleRequestAccess}>
-          <Text style={styles.requestButtonText}>Request Access</Text>
+          style={[styles.button, styles.reloadButton]}
+          onPress={_handleReload}>
+          <Text style={styles.buttonText}>Reload</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={_handleRequestAccess}>
+          <Text style={styles.buttonText}>Request Access</Text>
         </TouchableOpacity>
       </View>
       <Spinner visible={spinnerVisible} />

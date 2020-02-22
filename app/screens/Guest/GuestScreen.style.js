@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     color: PRIMARY_GRAY_TEXT,
     flex: 1,
   },
-  requestButton: {
+  button: {
     backgroundColor: DARK_GRAY_BACK,
     height: 51,
     alignItems: 'center',
@@ -53,9 +53,12 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 4,
   },
-  requestButtonText: {
+  buttonText: {
     color: '#FFF',
     fontSize: 24,
+  },
+  reloadButton: {
+    marginBottom: 0,
   },
 });
 
