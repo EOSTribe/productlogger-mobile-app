@@ -20,6 +20,7 @@ const getTableRows = table => {
     code: 'productloger',
     scope: 'productloger',
     table,
+    limit: -1,
   });
 };
 
