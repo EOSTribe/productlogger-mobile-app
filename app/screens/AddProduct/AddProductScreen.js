@@ -79,7 +79,6 @@ const AddProductScreen = props => {
           <Text style={styles.formLabel}>RFID Tag</Text>
           <TextInput
             style={[styles.formInput, styles.tagInput]}
-            secureTextEntry={true}
             editable={false}
             value={barCodeData}
           />
