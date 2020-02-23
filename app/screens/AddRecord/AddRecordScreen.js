@@ -61,32 +61,25 @@ const AddRecordScreen = props => {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.innerContainer}>
-        <View style={styles.form}>
-          <View style={styles.formHeader}>
-            <Text style={styles.formTitle}>Add New Record</Text>
-          </View>
-          <View style={styles.formBody}>
-            <Text style={styles.formLabel}>Record Description</Text>
-            <TextInput
-              style={[styles.formInput, styles.descriptionInput]}
-              multiline={true}
-              value={description}
-              onChangeText={setDescription}
-            />
-            {/* <Text style={styles.formLabel}>RFID Tag</Text>
+        <Text style={styles.formLabel}>Record Description</Text>
+        <TextInput
+          style={[styles.formInput, styles.descriptionInput]}
+          multiline={true}
+          value={description}
+          onChangeText={setDescription}
+        />
+        {/* <Text style={styles.formLabel}>RFID Tag</Text>
             <TextInput
               style={[styles.formInput, styles.tagInput]}
               secureTextEntry={true}
               editable={false}
               value={productId}
             /> */}
-            {/* <TouchableOpacity
+        {/* <TouchableOpacity
               style={[styles.button, styles.scanButton]}
               onPress={_handleScan}>
               <Text style={styles.buttonText}>Scan</Text>
             </TouchableOpacity> */}
-          </View>
-        </View>
         <TouchableOpacity
           style={[styles.button, styles.saveButton]}
           onPress={_handleSave}>

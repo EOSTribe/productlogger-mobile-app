@@ -54,29 +54,22 @@ const AddUserScreen = props => {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.innerContainer}>
-        <View style={styles.form}>
-          <View style={styles.formHeader}>
-            <Text style={styles.formTitle}>Add New User</Text>
-          </View>
-          <View style={styles.formBody}>
-            <Text style={styles.formLabel}>Username</Text>
-            <TextInput
-              style={styles.formInput}
-              value={username}
-              onChangeText={setUsername}
-              autoCapitalize={'none'}
-            />
-            <Text style={styles.formLabel}>Description</Text>
-            <TextInput
-              style={styles.formInput}
-              value={description}
-              onChangeText={setDescription}
-            />
-            <TouchableOpacity style={styles.addButton} onPress={_handleAddUser}>
-              <Text style={styles.addButtonText}>Add User</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <Text style={styles.formLabel}>Username</Text>
+        <TextInput
+          style={styles.formInput}
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize={'none'}
+        />
+        <Text style={styles.formLabel}>Description</Text>
+        <TextInput
+          style={styles.formInput}
+          value={description}
+          onChangeText={setDescription}
+        />
+        <TouchableOpacity style={styles.addButton} onPress={_handleAddUser}>
+          <Text style={styles.addButtonText}>Add User</Text>
+        </TouchableOpacity>
       </View>
       <Spinner visible={spinnerVisible} />
     </SafeAreaView>

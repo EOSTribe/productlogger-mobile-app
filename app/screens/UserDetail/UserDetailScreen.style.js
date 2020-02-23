@@ -10,15 +10,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileView: {
-    marginHorizontal: 40,
-    marginTop: 20,
+    margin: 20,
   },
   deleteButton: {
     backgroundColor: DARK_GRAY_BACK,
     height: 51,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 40,
+    marginHorizontal: 20,
     borderRadius: 4,
     marginTop: 32,
   },
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
   switchWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 40,
+    marginHorizontal: 20,
     marginTop: 32,
   },
   switchLabel: {

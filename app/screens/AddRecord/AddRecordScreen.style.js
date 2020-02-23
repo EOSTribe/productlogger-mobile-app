@@ -1,10 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import {
-  LIGHT_GRAY_BACK,
-  DARK_GRAY_BACK,
-  SECONDARY_GRAY_TEXT,
-} from '../../theme/colors';
+import { DARK_GRAY_BACK, SECONDARY_GRAY_TEXT } from '../../theme/colors';
 
 const styles = StyleSheet.create({
   safeContainer: {
@@ -12,28 +8,11 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
+    paddingHorizontal: 20,
   },
   profileView: {
     marginHorizontal: 40,
     marginTop: 20,
-  },
-  form: {
-    backgroundColor: LIGHT_GRAY_BACK,
-    borderRadius: 4,
-    margin: 20,
-  },
-  formHeader: {
-    backgroundColor: DARK_GRAY_BACK,
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
-    padding: 8,
-  },
-  formTitle: {
-    fontSize: 28,
-    color: '#FFF',
-  },
-  formBody: {
-    padding: 20,
   },
   formLabel: {
     fontSize: 20,
@@ -69,7 +48,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   saveButton: {
-    marginHorizontal: 20,
+    marginTop: 20,
   },
 });
 

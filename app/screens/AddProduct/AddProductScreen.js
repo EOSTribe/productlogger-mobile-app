@@ -63,38 +63,31 @@ const AddProductScreen = props => {
     <SafeAreaView style={styles.safeContainer}>
       <KeyboardAwareScrollView enableOnAndroid>
         <View style={styles.innerContainer}>
-          <View style={styles.form}>
-            <View style={styles.formHeader}>
-              <Text style={styles.formTitle}>Add New Product</Text>
-            </View>
-            <View style={styles.formBody}>
-              <Text style={styles.formLabel}>Product Name</Text>
-              <TextInput
-                style={[styles.formInput, styles.nameInput]}
-                value={productName}
-                onChangeText={setProductName}
-              />
-              <Text style={styles.formLabel}>Description</Text>
-              <TextInput
-                style={[styles.formInput, styles.descriptionInput]}
-                multiline={true}
-                value={description}
-                onChangeText={setDescription}
-              />
-              <Text style={styles.formLabel}>RFID Tag</Text>
-              <TextInput
-                style={[styles.formInput, styles.tagInput]}
-                secureTextEntry={true}
-                editable={false}
-                value={barCodeData}
-              />
-              <TouchableOpacity
-                style={[styles.button, styles.scanButton]}
-                onPress={_handleScan}>
-                <Text style={styles.buttonText}>Scan</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <Text style={styles.formLabel}>Product Name</Text>
+          <TextInput
+            style={[styles.formInput, styles.nameInput]}
+            value={productName}
+            onChangeText={setProductName}
+          />
+          <Text style={styles.formLabel}>Description</Text>
+          <TextInput
+            style={[styles.formInput, styles.descriptionInput]}
+            multiline={true}
+            value={description}
+            onChangeText={setDescription}
+          />
+          <Text style={styles.formLabel}>RFID Tag</Text>
+          <TextInput
+            style={[styles.formInput, styles.tagInput]}
+            secureTextEntry={true}
+            editable={false}
+            value={barCodeData}
+          />
+          <TouchableOpacity
+            style={[styles.button, styles.scanButton]}
+            onPress={_handleScan}>
+            <Text style={styles.buttonText}>Scan</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.saveButton]}
             onPress={_handleSave}>
