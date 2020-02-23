@@ -90,6 +90,7 @@ const ManagerHomeScreen = props => {
   ]);
   const [managedUsers, setManagedUsers] = useState([]);
   const [managedProducts, setManagedProducts] = useState([]);
+  const [activeRequests, setActiveRequests] = useState([]);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
 
   const UsersView = () => {
@@ -131,7 +132,7 @@ const ManagerHomeScreen = props => {
     return (
       <View style={styles.tabView}>
         <FlatList
-          data={requests}
+          data={activeRequests}
           renderItem={({ item, index }) => (
             <RequestListItem data={item} onPress={_handlePressRequestItem} />
           )}
@@ -177,7 +178,6 @@ const ManagerHomeScreen = props => {
 
   useEffect(() => {
     const filtered = _.filter(products, item => {
-      console.log(item.owners);
       return _.find(
         item.owners,
         owner => owner.owner === currentUser.accountName,
@@ -185,6 +185,13 @@ const ManagerHomeScreen = props => {
     });
     setManagedProducts(filtered);
   }, [currentUser.accountName, products]);
+
+  useEffect(() => {
+    const filtered = _.filter(requests, item => {
+      return !_.find(managedUsers, user => user.id === item.user_name);
+    });
+    setActiveRequests(filtered);
+  }, [requests, managedUsers]);
 
   const _loadUsers = async () => {
     setSpinnerVisible(true);
