@@ -75,6 +75,18 @@ const ProductDetailScreen = props => {
           }}
           style={styles.profileView}
         />
+        <View style={styles.details}>
+          <Text style={styles.detailItem}>{product.description}</Text>
+          <Text style={styles.detailItem}>
+            Created by {product.creator} on{' '}
+            {moment(product.created).format('MM/DD/YYYY')}
+          </Text>
+          {product.owners && product.owners.length > 0 && (
+            <Text style={styles.detailItem}>
+              Owned by {product.owners[0].owner}
+            </Text>
+          )}
+        </View>
         <Text style={styles.listTitleText}>Records</Text>
         <FlatList
           data={product.records}

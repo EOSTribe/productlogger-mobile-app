@@ -18,6 +18,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
     marginTop: 20,
   },
+  details: {
+    padding: 20,
+  },
+  detailItem: {
+    fontSize: 14,
+    lineHeight: 24,
+    color: SECONDARY_GRAY_TEXT,
+  },
   button: {
     backgroundColor: DARK_GRAY_BACK,
     height: 51,
@@ -34,7 +42,6 @@ const styles = StyleSheet.create({
   },
   listTitleText: {
     fontSize: 24,
-    marginTop: 20,
     marginLeft: 8,
     marginBottom: 8,
     color: SECONDARY_GRAY_TEXT,
