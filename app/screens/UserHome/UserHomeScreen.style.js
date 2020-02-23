@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 40,
     marginTop: 40,
+    marginBottom: 20,
     borderRadius: 4,
   },
   buttonText: {
