@@ -236,6 +236,18 @@ const ManagerHomeScreen = props => {
     }
   };
 
+  const _handleTabIndexChange = index => {
+    setTabIndex(index);
+
+    if (index === 0) {
+      _loadUsers();
+    } else if (index === 1) {
+      _loadProducts();
+    } else if (index === 2) {
+      _loadAccessRequests();
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.innerContainer}>
@@ -250,7 +262,7 @@ const ManagerHomeScreen = props => {
         <TabView
           navigationState={{ index: tabIndex, routes }}
           renderScene={renderScene}
-          onIndexChange={setTabIndex}
+          onIndexChange={_handleTabIndexChange}
           initialLayout={{ width: Dimensions.get('window').width }}
           renderTabBar={_renderTabBar}
         />
