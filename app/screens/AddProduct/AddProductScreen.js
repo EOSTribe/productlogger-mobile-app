@@ -25,7 +25,7 @@ const AddProductScreen = props => {
   };
 
   const _handleBarCodeRead = data => {
-    setBarCodeData(data);
+    setTimeout(setBarCodeData, 300, data);
   };
 
   const _handleSave = async () => {
@@ -79,7 +79,7 @@ const AddProductScreen = props => {
           <Text style={styles.formLabel}>RFID Tag</Text>
           <TextInput
             style={[styles.formInput, styles.tagInput]}
-            editable={false}
+            onChangeText={setBarCodeData}
             value={barCodeData}
           />
           <TouchableOpacity
